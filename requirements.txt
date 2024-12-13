@@ -1,0 +1,6 @@
+streamlit
+pyzotero
+openai
+sprynger
+requests
+beautifulsoup4
