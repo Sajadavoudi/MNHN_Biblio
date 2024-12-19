@@ -93,11 +93,13 @@ def zip_files(files, zip_file_path):
                 zipf.write(file_path, os.path.basename(file_path))
 
 # OpenAI layers processing
-st.header("OpenAI Layered Processing")
+st.header("Process the Articles")
 
 # OpenAI parameters
 openai_api_key = st.text_input("OpenAI API Key(add an s at the beginning)", value=default_openai_api_key, type="password")
-first_key, second_key, third_key = openai_api_key
+first_key = openai_api_key
+second_key = openai_api_key
+third_key = openai_api_key
 
 if st.button("Process OpenAI Layers"):
     if not openai_api_key:
