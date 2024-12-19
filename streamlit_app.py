@@ -11,13 +11,13 @@ from pyzotero import zotero
 table = False
 
 # App title
-st.title("MNHN Scientific Article Fetcher, Processor, and Zotero Integration")
+st.title("Muséum National d'Histoire Naturelle - Bibliométrie")
 
 # Editor selection
 editor = st.selectbox("Select Editor", ["Springer"])
 
 # API keys and configuration
-default_openai_api_key = "sk-proj-w_HaANTdVp-Bw_KpwwsqaGe6uWWR9APa1nbt6EVZEB5C8rlq94A"
+default_openai_api_key = "sk-proj-MqTgp-VLJYzAY2jHjCF6u9o9k28mrU5Ia2onDinZnC6J84Y5ttjCJtogE93ivrLNqL_C7Kd2rjT3BlbkFJYwdD80FdBxF8EtjRcpp4H_iqdMMdoEw79RvbDUDybYDRd30vZC_tGNDTyTckakVnobRR8IPRc"
 default_springer_api_key = "8c3e7b22f27abe96a693af900ab4e965"
 default_zotero_library_id = "15818985"
 default_zotero_api_key = "AJ7jW0HWRUufShR3FeO2717h"
@@ -29,11 +29,11 @@ if editor == "Springer":
     st.header("Springer Article Fetcher")
 
     # Springer parameters
-    springer_api_key = st.text_input("Springer API Key", value=default_springer_api_key, type="password")
+    springer_api_key = st.text_input("Springer API Key (Add an A)", value=default_springer_api_key, type="password")
     date_from = st.date_input("Start Date", value=date(2023, 1, 1))
     date_to = st.date_input("End Date", value=date(2023, 1, 30))
     keywords_input = st.text_area("Keywords (comma-separated)", value="Muséum National d’Histoire Naturelle, MNHN, Museum National d’Histoire Naturelle, National Museum of Natural History")
-    num_results = st.number_input("Number of Results", min_value=1, value=130)
+    num_results = st.number_input("Number of Results", min_value=1, value=100)
     output_folder = st.text_input("Output Folder Name", value="output_folder")
     output_file = st.text_input("Output JSON File Name", value="articles.json")
 
@@ -61,7 +61,17 @@ if editor == "Springer":
                     json_file=output_file,
                     folder_name=output_folder
                 )
+                # Provide download access for the JSON file
+                if os.path.exists(os.path.join(output_folder, output_file)):
+                    with open(os.path.join(output_folder, output_file), "rb") as json_file:
+                        st.download_button(
+                            label="Download JSON File",
+                            data=json_file,
+                            file_name=output_file,
+                            mime="application/json"
+                            )
 
+                # Provide download access for the JSON file
                 st.success(f"Articles fetched and stored in '{os.path.join(output_folder, output_file)}'.")
             except Exception as e:
                 st.error(f"An error occurred: {e}")
