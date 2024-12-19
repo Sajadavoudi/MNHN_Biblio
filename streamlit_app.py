@@ -29,7 +29,7 @@ if editor == "Springer":
     st.header("Springer Article Fetcher")
 
     # Springer parameters
-    springer_api_key = st.text_input("Springer API Key (Add an A)", value=default_springer_api_key, type="password")
+    springer_api_key = st.text_input("Springer API Key", value=default_springer_api_key, type="password")
     date_from = st.date_input("Start Date", value=date(2023, 1, 1))
     date_to = st.date_input("End Date", value=date(2023, 1, 30))
     keywords_input = st.text_area("Keywords (comma-separated)", value="Muséum National d’Histoire Naturelle, MNHN, Museum National d’Histoire Naturelle, National Museum of Natural History")
@@ -84,7 +84,7 @@ if editor == "Springer":
 st.header("OpenAI Layered Processing")
 
 # OpenAI parameters
-openai_api_key = st.text_input("OpenAI API Key", value=default_openai_api_key, type="password")
+openai_api_key = st.text_input("OpenAI API Key (Add an A)", value=default_openai_api_key, type="password")
 
 if st.button("Process OpenAI Layers"):
     if not openai_api_key:
@@ -99,9 +99,36 @@ if st.button("Process OpenAI Layers"):
             # Process layers
             process_first_layer(input_file=os.path.join(output_folder, output_file), output_file=first_layer_file)
             st.success(f"First layer processing completed. Output: {first_layer_file}")
+            # Provide download access for the JSON file
+            if os.path.exists(os.path.join(output_folder, output_file)):
+                with open(os.path.join(output_folder, output_file), "rb") as json_file:
+                    st.download_button(
+                        label="Download JSON File",
+                        data=json_file,
+                        file_name=first_layer_file,
+                        mime="application/json"
+                        )
             process_second_layer(input_json=first_layer_file, output_json=second_layer_file)
             st.success(f"Second layer processing completed. Output: {second_layer_file}")
+            # Provide download access for the JSON file
+            if os.path.exists(os.path.join(output_folder, output_file)):
+                with open(os.path.join(output_folder, output_file), "rb") as json_file:
+                    st.download_button(
+                        label="Download JSON File",
+                        data=json_file,
+                        file_name=second_layer_file,
+                        mime="application/json"
+                        )
             process_specimen_validation(input_file=second_layer_file, output_file=third_layer_file)
+            # Provide download access for the JSON file
+            if os.path.exists(os.path.join(output_folder, output_file)):
+                with open(os.path.join(output_folder, output_file), "rb") as json_file:
+                    st.download_button(
+                        label="Download JSON File",
+                        data=json_file,
+                        file_name=third_layer_file,
+                        mime="application/json"
+                        )
             #table = True
             st.success(f"Third layer processing completed. Output: {third_layer_file}")
 
