@@ -19,7 +19,7 @@ st.title("Muséum National d'Histoire Naturelle - Bibliométrie")
 editor = st.selectbox("Select Editor", ["Springer"])
 
 # API keys and configuration
-default_openai_api_key = "sk-proj-MqTgp-VLJYzAY2jHjCF6u9o9k28mrU5Ia2onDinZnC6J84Y5ttjCJtogE93ivrLNqL_C7Kd2rjT3BlbkFJYwdD80FdBxF8EtjRcpp4H_iqdMMdoEw79RvbDUDybYDRd30vZC_tGNDTyTckakVnobRR8IPRc"
+default_openai_api_key = "k-proj-ZqoB1Pa8SIjCXdai5QmLGPMlCtZ8O0joHS6TTcaP9SzsHB1lOZr71khxR3YryVCUUNpq92xtHxT3BlbkFJJal1OFjc4rgVDl5bcD0X5N-TKvWI4WU9LxkHli36icEutv1XWBklknzqtQ-j2Snm_mM1WSNU0A"
 default_springer_api_key = "8c3e7b22f27abe96a693af900ab4e965"
 default_zotero_library_id = "15818985"
 default_zotero_api_key = "AJ7jW0HWRUufShR3FeO2717h"
@@ -94,7 +94,7 @@ def zip_files(files, zip_file_path):
 st.header("OpenAI Layered Processing")
 
 # OpenAI parameters
-openai_api_key = st.text_input("OpenAI API Key(add an A)", value=default_openai_api_key, type="password")
+openai_api_key = st.text_input("OpenAI API Key(add an s at the beginning)", value=default_openai_api_key, type="password")
 
 if st.button("Process OpenAI Layers"):
     if not openai_api_key:
