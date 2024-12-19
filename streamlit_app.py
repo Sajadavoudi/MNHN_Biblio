@@ -8,9 +8,9 @@ from OpenAI_SecondLayer import process_second_layer
 from OpenAI_ThirdLayer import process_specimen_validation
 from pyzotero import zotero
 import zipfile
-import OpenAI_FirsLayer
-import OpenAI_SecondLayer
-import OpenAI_ThirdLayer
+from OpenAI_FirsLayer import openai_api_key as first_key
+from OpenAI_SecondLayer import openai_api_key as second_key
+from OpenAI_ThirdLayer import openai_api_key as third_key
 
 table = False
 
@@ -97,9 +97,7 @@ st.header("OpenAI Layered Processing")
 
 # OpenAI parameters
 openai_api_key = st.text_input("OpenAI API Key(add an s at the beginning)", value=default_openai_api_key, type="password")
-OpenAI_FirsLayer.openai.api_key = openai_api_key
-OpenAI_SecondLayer.openai.api_key = openai_api_key
-OpenAI_ThirdLayer.openai.api_key = openai_api_key
+first_key, second_key, third_key = openai_api_key
 
 if st.button("Process OpenAI Layers"):
     if not openai_api_key:
