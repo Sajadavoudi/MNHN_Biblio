@@ -2,7 +2,7 @@ import openai
 import json
 
 # OpenAI API key
-openai.api_key = "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"
+openai.api_key = "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"
 
 # OpenAI Prompt Template
 PROMPT_TEMPLATE = """
