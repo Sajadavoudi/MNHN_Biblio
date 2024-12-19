@@ -7,6 +7,8 @@ from OpenAI_FirsLayer import process_json_file as process_first_layer
 from OpenAI_SecondLayer import process_second_layer
 from OpenAI_ThirdLayer import process_specimen_validation
 from pyzotero import zotero
+import zipfile
+
 
 table = False
 
@@ -80,11 +82,19 @@ if editor == "Springer":
 ######################################OPENAI####################################
 ######################################OPENAI####################################
 ######################################OPENAI####################################
+
+# Add this function to compress files into a zip file
+def zip_files(files, zip_file_path):
+    with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        for file_path in files:
+            if os.path.exists(file_path):
+                zipf.write(file_path, os.path.basename(file_path))
+
 # OpenAI layers processing
 st.header("OpenAI Layered Processing")
 
 # OpenAI parameters
-openai_api_key = st.text_input("OpenAI API Key (Add an A)", value=default_openai_api_key, type="password")
+openai_api_key = st.text_input("OpenAI API Key(add an A)", value=default_openai_api_key, type="password")
 
 if st.button("Process OpenAI Layers"):
     if not openai_api_key:
@@ -99,41 +109,27 @@ if st.button("Process OpenAI Layers"):
             # Process layers
             process_first_layer(input_file=os.path.join(output_folder, output_file), output_file=first_layer_file)
             st.success(f"First layer processing completed. Output: {first_layer_file}")
-            # Provide download access for the JSON file
-            if os.path.exists(os.path.join(output_folder, output_file)):
-                with open(os.path.join(output_folder, output_file), "rb") as json_file:
-                    st.download_button(
-                        label="Download JSON File",
-                        data=json_file,
-                        file_name=first_layer_file,
-                        mime="application/json"
-                        )
             process_second_layer(input_json=first_layer_file, output_json=second_layer_file)
             st.success(f"Second layer processing completed. Output: {second_layer_file}")
-            # Provide download access for the JSON file
-            if os.path.exists(os.path.join(output_folder, output_file)):
-                with open(os.path.join(output_folder, output_file), "rb") as json_file:
-                    st.download_button(
-                        label="Download JSON File",
-                        data=json_file,
-                        file_name=second_layer_file,
-                        mime="application/json"
-                        )
             process_specimen_validation(input_file=second_layer_file, output_file=third_layer_file)
-            # Provide download access for the JSON file
-            if os.path.exists(os.path.join(output_folder, output_file)):
-                with open(os.path.join(output_folder, output_file), "rb") as json_file:
-                    st.download_button(
-                        label="Download JSON File",
-                        data=json_file,
-                        file_name=third_layer_file,
-                        mime="application/json"
-                        )
-            #table = True
             st.success(f"Third layer processing completed. Output: {third_layer_file}")
+
+            # Combine all files into a zip for a single download
+            zip_file_path = os.path.join(output_folder, "processed_layers.zip")
+            zip_files([first_layer_file, second_layer_file, third_layer_file], zip_file_path)
+
+            # Provide download access for the ZIP file
+            with open(zip_file_path, "rb") as zip_file:
+                st.download_button(
+                    label="Download All Processed Files (ZIP)",
+                    data=zip_file,
+                    file_name="processed_layers.zip",
+                    mime="application/zip"
+                )
 
         except Exception as e:
             st.error(f"An error occurred during processing: {e}")
+
 
 ######################################TABLE####################################
 ######################################TABLE####################################
