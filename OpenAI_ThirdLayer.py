@@ -2,7 +2,7 @@ import openai
 import json
 
 # OpenAI API key
-#openai.api_key = "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"
+openai.api_key = ""
 
 # Predefined categories and subcategories
 CATEGORY_SUBCATEGORY_MAPPING = {
